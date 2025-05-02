@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Результати - Аналіз якості сну{% endblock %}
+{% block title %}Результати - Дослідження
+якості сну та
+методи як його покращити{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -29,7 +31,7 @@
 
     .title {
         font-size: 36px;
-        color: #ffffff;
+        color: #000000;
         margin-bottom: 30px;
         font-weight: bold;
         text-align: center;
@@ -43,7 +45,7 @@
     }
 
     .results-card {
-        background-color: #f0f4f8;
+        background-color: #f8f8f8;
         padding: 40px;
         border-radius: 8px;
         width: 100%;
@@ -64,7 +66,7 @@
     .score-value {
         font-size: 48px;
         font-weight: bold;
-        color: #1e3c72;
+        color: #2a5298;
     }
 
     .score-max {
@@ -74,13 +76,13 @@
 
     .result-text {
         font-size: 24px;
-        color: #1e3c72;
+        color: #2a5298;
         margin: 30px 0;
         font-weight: bold;
     }
 
     .restart-button {
-        background-color: #1e3c72;
+        background-color: #2a5298;
         color: white;
         border: none;
         padding: 15px 30px;
@@ -94,7 +96,7 @@
     }
 
     .restart-button:hover {
-        background-color: #16315f;
+        background-color: #1e3c72;
     }
 
     .share-container {
@@ -113,7 +115,7 @@
     }
 
     .share-button {
-        background-color: #2a5298;
+        background-color: #333;
         color: white;
         border: none;
         padding: 10px 15px;
@@ -252,8 +254,8 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Share functionality
-        const shareText = "{{ result_text }}";  // Ось тут замінимо на result_text, щоб ділитися саме повідомленням
-        const shareUrl = window.location.href;;
+        const shareText = "Я отримав {{ total_score }} із {{ max_score }} балів у симуляції військового рекрутингу!";
+        const shareUrl = window.location.href;
         
         document.getElementById('facebookShare').addEventListener('click', function() {
             window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareText)}`, '_blank');

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Результати - Аналіз якості сну{% endblock %}
+{% block title %}Помилка - Аналіз якості сну{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -9,7 +9,7 @@
         font-family: "IBM Plex Mono", monospace;
         background: linear-gradient(180deg, #1e3c72 0%, #2a5298 50%, #7b9acc 100%);
     }
-
+    
     body > .container {
         background-color: transparent;
         max-width: 100%;
@@ -19,205 +19,94 @@
 
     .content-container {
         max-width: 800px;
-        margin: 90px auto;
+        width: 95%;
+        margin: 60px auto;
         background-color: white;
-        padding: 40px;
-        min-height: calc(100vh - 200px);
+        padding: 30px;
+        min-height: calc(100vh - 180px);
         display: flex;
         flex-direction: column;
-    }
-
-    .title {
-        font-size: 36px;
-        color: #000000;
-        margin-bottom: 30px;
-        font-weight: bold;
-        text-align: center;
-    }
-
-    .results-container {
-        display: flex;
-        flex-direction: column;
-        gap: 30px;
         align-items: center;
-    }
-
-    .results-card {
-        background-color: #f8f8f8;
-        padding: 40px;
-        border-radius: 8px;
-        width: 100%;
-        max-width: 600px;
-        text-align: center;
-    }
-
-    .score-container {
-        margin: 30px 0;
-    }
-
-    .score-title {
-        font-size: 20px;
-        color: #333;
-        margin-bottom: 15px;
-    }
-
-    .score-value {
-        font-size: 48px;
-        font-weight: bold;
-        color: #1e3c72;
-    }
-
-    .score-max {
-        font-size: 20px;
-        color: #666;
-    }
-
-    .result-text {
-        font-size: 24px;
-        color: #1e3c72;
-        margin: 30px 0;
-        font-weight: bold;
-    }
-
-    .restart-button {
-        background-color: #1e3c72;
-        color: white;
-        border: none;
-        padding: 15px 30px;
-        border-radius: 5px;
-        cursor: pointer;
-        font-family: "IBM Plex Mono", monospace;
-        font-size: 18px;
-        text-decoration: none;
-        display: inline-block;
-        margin-top: 20px;
-    }
-
-    .restart-button:hover {
-        background-color: #16315f;
-    }
-
-    .share-container {
-        margin-top: 30px;
-    }
-
-    .share-title {
-        font-size: 18px;
-        margin-bottom: 15px;
-    }
-
-    .share-buttons {
-        display: flex;
         justify-content: center;
-        gap: 15px;
+        text-align: center;
+        box-sizing: border-box;
     }
-
-    .share-button {
+    
+    .title {
+        font-size: 30px;
+        color: #000000;
+        margin-bottom: 25px;
+        font-weight: bold;
+    }
+    
+    .error-message {
+        font-size: 18px;
+        color: #666;
+        margin-bottom: 25px;
+        line-height: 1.5;
+    }
+    
+    .admin-link {
         background-color: #2a5298;
         color: white;
-        border: none;
-        padding: 10px 15px;
+        text-decoration: none;
+        padding: 12px 25px;
         border-radius: 5px;
-        cursor: pointer;
+        font-size: 16px;
+        display: inline-block;
     }
-
-    .share-button:hover {
+    
+    .admin-link:hover {
         background-color: #1e3c72;
+        color: white;
+        text-decoration: none;
     }
 
-    /* Mobile styles */
-    @media (max-width: 767px) {
+    /* Медіа-запити для адаптивності */
+    @media (max-width: 768px) {
         .content-container {
-            padding: 20px;
-            margin-top: 20px;
+            margin: 40px auto;
+            padding: 25px;
         }
-
+        
         .title {
-            font-size: 28px;
+            font-size: 26px;
             margin-bottom: 20px;
         }
-
-        .results-card {
-            padding: 20px;
-        }
-
-        .score-title {
-            font-size: 18px;
-        }
-
-        .score-value {
-            font-size: 36px;
-        }
-
-        .score-max {
+        
+        .error-message {
             font-size: 16px;
+            margin-bottom: 20px;
         }
-
-        .result-text {
-            font-size: 20px;
-        }
-
-        .restart-button {
-            font-size: 16px;
-            padding: 12px 25px;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .share-title {
-            font-size: 16px;
-        }
-
-        .share-button {
-            font-size: 14px;
-            padding: 8px 12px;
+        
+        .admin-link {
+            padding: 10px 20px;
+            font-size: 15px;
         }
     }
 
-    /* Tablet styles */
-    @media (max-width: 1024px) and (min-width: 768px) {
+    @media (max-width: 576px) {
         .content-container {
-            padding: 30px;
-            margin-top: 40px;
+            margin: 30px auto;
+            padding: 20px;
+            width: 90%;
         }
-
+        
         .title {
-            font-size: 32px;
-            margin-bottom: 25px;
-        }
-
-        .results-card {
-            padding: 30px;
-        }
-
-        .score-title {
-            font-size: 18px;
-        }
-
-        .score-value {
-            font-size: 42px;
-        }
-
-        .score-max {
-            font-size: 18px;
-        }
-
-        .result-text {
             font-size: 22px;
+            margin-bottom: 15px;
         }
-
-        .restart-button {
-            font-size: 16px;
-            padding: 12px 25px;
+        
+        .error-message {
+            font-size: 14px;
+            margin-bottom: 15px;
         }
-
-        .share-title {
-            font-size: 17px;
-        }
-
-        .share-button {
-            font-size: 15px;
-            padding: 10px 15px;
+        
+        .admin-link {
+            padding: 8px 16px;
+            font-size: 14px;
+            width: 100%;
+            box-sizing: border-box;
         }
     }
 </style>
@@ -225,54 +114,12 @@
 
 {% block content %}
 <div class="content-container">
-    <h1 class="title">Результати симуляції</h1>
+    <h1 class="title">Помилка конфігурації</h1>
     
-    <div class="results-container">
-        <div class="results-card">
-            <h2>Ви завершили симуляцію</h2>
-            
-            <div class="score-container">
-                <div class="score-title">Ваш результат:</div>
-                <div class="score-value">{{ total_score }}</div>
-                <div class="score-max">із {{ max_score }} можливих</div>
-            </div>
-            
-            <div class="result-text">
-                {{ result_text }}
-            </div>
-            
-            <a href="{% url 'simulation:start' %}" class="restart-button">Почати знову</a>
-            
-            <div class="share-container">
-                <div class="share-title">Поділитися результатом:</div>
-                <div class="share-buttons">
-                    <button class="share-button" id="facebookShare">Facebook</button>
-                    <button class="share-button" id="twitterShare">Twitter</button>
-                    <button class="share-button" id="telegramShare">Telegram</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <p class="error-message">
+        На жаль, у системі відсутні блоки симуляції. Будь ласка, зверніться до адміністратора для налаштування системи.
+    </p>
+    
+    <a href="/admin/" class="admin-link">Перейти до адмін-панелі</a>
 </div>
-{% endblock %}
-
-{% block extra_js %}
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const shareText = "Я отримав {{ total_score }} із {{ max_score }} балів у симуляції військового рекрутингу!";
-        const shareUrl = window.location.href;
-        
-        document.getElementById('facebookShare').addEventListener('click', function() {
-            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareText)}`, '_blank');
-        });
-        
-        document.getElementById('twitterShare').addEventListener('click', function() {
-            window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`, '_blank');
-        });
-        
-        document.getElementById('telegramShare').addEventListener('click', function() {
-            window.open(`https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`, '_blank');
-        });
-    });
-</script>
 {% endblock %}

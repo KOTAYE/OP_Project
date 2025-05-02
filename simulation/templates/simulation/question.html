@@ -5,7 +5,6 @@
 
 {% block extra_css %}
 <style>
-    
     body {
         font-family: "IBM Plex Mono", monospace;
         background: linear-gradient(180deg, #1e3c72 0%, #2a5298 50%, #7b9acc 100%);
@@ -213,7 +212,6 @@
         
         <div class="question-container">
             <h2 class="question-title">Питання {{ current_question_number }} / {{ total_questions }}</h2>
-
             <p class="question-text">{{ question.text }}</p>
             
             <form method="post" action="{% url 'simulation:question' question_id=question.id %}">
@@ -247,28 +245,5 @@
         
         document.getElementById('progressFill').style.width = progress + '%';
     });
-    
 </script>
-<div class="question-counter">
-    Питання {{ current_index }} / {{ total_questions }}
-</div>
-<style>
-    .question-counter {
-        font-family: "IBM Plex Mono", monospace;
-        font-size: 18px;
-        color: #3b6e8f;
-        font-weight: bold;
-        margin-bottom: 15px;
-        text-align: right;
-    }
-    
-    @media (max-width: 576px) {
-        .question-counter {
-            font-size: 16px;
-            text-align: center;
-            margin-bottom: 10px;
-        }
-    }
-    </style>
-    
 {% endblock %}

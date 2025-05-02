@@ -23,16 +23,17 @@
         padding: 0.5rem 1rem;
         }
 
+
         .nav-item-custom {
             margin: 0 10px;
             text-decoration: none;
-            color: #0056b3; /* Синій колір */
+            color: #333;
             font-weight: 500;
         }
 
         .nav-item-custom:hover {
             text-decoration: underline;
-            color: #003366; /* Темно-синій колір */
+            color: #000;
         }
 
         .dropdown-menu .dropdown-item:hover {
@@ -58,57 +59,46 @@
         .footer-item {
             margin: 0 15px;
             text-decoration: none;
-            color: #0056b3; /* Синій колір */
+            color: #333;
         }
 
         .footer-item:hover {
             text-decoration: underline;
-            color: #003366; /* Темно-синій колір */
         }
 
         .footer-line {
             margin: 20px 0;
             border-color: #ccc;
         }
-
         .logo {
             height: 40px;
             width: auto;
         }
 
         .nav-item-custom {
-            color: #0056b3; /* Синій колір */
+            color: #333;
             font-weight: 500;
             text-decoration: none;
         }
 
         .nav-item-custom:hover {
             text-decoration: underline;
-            color: #003366; /* Темно-синій колір */
+            color: #000;
         }
-
         @media (max-width: 768px) {
-            .desktop-nav {
-                display: none !important;
-            }
-        }
+  .desktop-nav {
+    display: none !important;
+  }
+}
 
-        @media (max-width: 768px) {
-            .main-image {
-                width: 100%;
-                height: auto;
-                max-width: 100%;
-            }
-        }
+@media (max-width: 768px) {
+  .main-image {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+  }
+}
 
-        footer div {
-            background-color: #f8f9fa; /* Змінили фон для покращення видимості */
-            padding: 10px 0;
-        }
-
-        footer div hr {
-            border-color: #ccc;
-        }
     </style>
 </head>
 <body>
@@ -175,12 +165,10 @@
         .footer-item {
             margin: 0 15px;
             text-decoration: none;
-            color: #0056b3; /* Синій колір для посилань */
         }
     
         .footer-item:hover {
             text-decoration: underline;
-            color: #003366; /* Темно-синій колір */
         }
     
         /* Робимо текст "НУЛП Всі права захищено" більш видимим */
@@ -191,6 +179,21 @@
             margin-top: 15px; /* Відступ зверху */
         }
     </style>
+    <style>
+        .footer {
+            font-family: "IBM Plex Mono", monospace;  /* Шрифт, який використовується на сайті */
+            background-color: #f0f0f0;  /* Світлий фон для футера */
+            padding: 10px 0;  /* Зменшені відступи (верхній і нижній) */
+            text-align: center;  /* Центруємо текст */
+            font-size: 14px;  /* Зменшуємо розмір шрифту */
+            color: #333;  /* Текст темно-сірий */
+        }
+    
+        .footer p {
+            margin: 0;  /* Видаляємо зайві відступи знизу і зверху */
+        }
+    </style>
+    
     
 </body>
 </html>
