@@ -1,0 +1,946 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Головна - Дослідження рекрутингу в українську армію{% endblock %}
+
+{% block head_meta %}
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
+<style>
+    body {
+    font-family: "IBM Plex Mono", monospace;
+    background: linear-gradient(180deg, #1e3c72 0%, #2a5298 50%, #7b9acc 100%);
+    color: #f0f4f8;
+}
+
+
+    body > .container {
+        background-color: transparent;
+        max-width: 100%;
+        padding: 0;
+        margin-top: 0;
+    }
+    html, body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+
+    .content-container {
+        max-width: 800px;
+        margin: 90px auto;
+        background-color: white;
+        padding: 40px;
+        min-height: calc(100vh - 200px);
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+    }
+
+    .title {
+        text-align: left;
+        font-size: 60px;
+        margin-bottom: 40px;
+        color: #000000;
+        font-weight: bold;
+        line-height: 1.2;
+        margin-left: 50px;
+    }
+
+    .section-line {
+        border: none;
+        border-top: 2px solid #ddd;
+        margin: 20px 0;
+    }
+
+    .authors-section {
+        text-align: left;
+        margin-top: 40px;
+        padding-left: 45px;
+        margin-bottom: 40px;
+    }
+
+    .authors-title {
+        font-size: 20px;
+        color: #2a5298;
+        margin-bottom: 20px;
+        text-align: left;
+    }
+
+    .authors-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        justify-content: center;
+    }
+
+    .author {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        text-align: left;
+    }
+
+    .author-photo {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .author-name {
+        font-size: 16px;
+        color: #333;
+    }
+
+    .content {
+        font-size: 16px;
+        line-height: 1.6;
+        color: #333;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0 10px;
+    }
+
+    .content p {
+        margin-bottom: 20px;
+    }
+
+    /* Map section styles */
+    .map-section {
+        margin: 40px 0;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .map-title {
+        background-color: #3c5a2c;
+        color: white;
+        padding: 10px 20px;
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 0;
+        text-transform: uppercase;
+    }
+    
+    #map {
+        width: 100%;
+        height: 500px;
+        border: 1px solid #ddd;
+    }
+
+    .map-description {
+        margin-top: 20px;
+        font-size: 16px;
+        line-height: 1.6;
+        text-align: justify;
+    }
+    
+    .recruitment-section {
+        max-width: 100%;
+        margin: 0 auto;
+        font-family: "IBM Plex Mono", monospace;
+        line-height: 1.6;
+        padding: 0 10px;
+        box-sizing: border-box;
+    }
+
+    .recruitment-section h2, .recruitment-section h3 {
+        color: #2a6d2a;
+        margin-top: 1.5em;
+        word-wrap: break-word;
+    }
+
+    .recruitment-section h3 span {
+        margin-right: 8px;
+    }
+
+    .recruitment-section ul {
+        list-style: disc;
+        margin-left: 20px;
+        padding-right: 10px;
+    }
+    
+    .recruitment-section li {
+        margin-bottom: 10px;
+    }
+
+    .carousel-container {
+        position: relative;
+        margin: 1em 0 2em;
+        overflow: hidden;
+        border-radius: 12px;
+        background: #f3f7ff;
+        padding: 20px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .carousel-track {
+        display: flex;
+        transition: transform 0.3s ease;
+    }
+
+    .carousel-slide {
+        min-width: 100%;
+        text-align: center;
+        padding: 20px 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .carousel-link {
+        font-size: 1.2em;
+        text-decoration: none;
+        background: #3c5a2c;
+        color: #fff;
+        padding: 12px 24px;
+        border-radius: 30px;
+        display: inline-block;
+        transition: background 0.3s;
+        font-family: "IBM Plex Mono", monospace;
+        text-align: center;
+        word-wrap: break-word;
+        max-width: 90%;
+    }
+
+    .carousel-link:hover {
+        background: #2a6d2a;
+    }
+
+    .carousel-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: #3c5a2c;
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        font-size: 1.5em;
+        cursor: pointer;
+        border-radius: 50%;
+        z-index: 10;
+    }
+
+    .carousel-btn.prev {
+        left: 10px;
+    }
+
+    .carousel-btn.next {
+        right: 10px;
+    }
+
+    .carousel-btn:hover {
+        background: #2a326d;
+    }
+    .content-container {
+    max-width: 800px;
+    margin: 90px auto;
+    background-color: white;
+    padding: 40px;
+    min-height: calc(100vh - 220px); /* Збільшено мінімальну висоту */
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    border-radius: 10px; /* Додано закруглення кутів для кращого вигляду */
+}
+
+.content-container p, .content-container ul {
+    margin-bottom: 20px; /* Додано більше відступів між абзацами */
+}
+
+body {
+    font-family: "IBM Plex Mono", monospace;
+    background: linear-gradient(180deg, #1e3c72 0%, #2a5298 50%, #7b9acc 100%);
+    color: #f0f4f8;
+    min-height: 100vh; /* Забезпечує, щоб фон займав всю висоту екрану */
+    padding-bottom: 50px; /* Додано відступ для нижньої частини екрану */
+}
+
+/* Текст і кольори в контенті */
+.content-container {
+    color: #333; /* Колір тексту для кращої видимості */
+}
+
+h3, h2 {
+    color: #2a6d2a;
+}
+
+    
+    /* Mobile-specific styles */
+    @media screen and (max-width: 768px) {
+        .content-container {
+            margin: 20px auto;
+            padding: 15px;
+            width: 95%;
+        }
+        
+        .title {
+            font-size: 30px;
+            margin-left: 10px;
+            margin-bottom: 20px;
+        }
+
+        .authors-section {
+            padding-left: 10px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .authors-title {
+            font-size: 16px;
+        }
+        
+        .authors-container {
+            grid-template-columns: 1fr;
+        }
+        
+        .author-photo {
+            width: 60px;
+            height: 60px;
+        }
+
+        .content p {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        #map {
+            height: 250px;
+        }
+
+        .author-name {
+            font-size: 12px;
+        }
+        
+        .recruitment-section {
+            padding: 0 5px;
+        }
+        
+        .recruitment-section h2 {
+            font-size: 18px;
+            margin-top: 1em;
+        }
+        
+        .recruitment-section h3 {
+            font-size: 16px;
+        }
+        
+        .recruitment-section p, .recruitment-section li {
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        
+        .carousel-container {
+            padding: 10px;
+            margin: 0.5em 0 1em;
+        }
+        
+        .carousel-slide {
+            padding: 10px 0;
+        }
+        
+        .carousel-link {
+            font-size: 0.9em;
+            padding: 8px 16px;
+            max-width: 85%;
+            white-space: normal;
+        }
+        
+        .carousel-btn {
+            padding: 5px 10px;
+            font-size: 1.2em;
+        }
+    }
+    body {
+    font-family: "IBM Plex Mono", monospace;
+    background: linear-gradient(180deg, #1e3c72 0%, #2a5298 50%, #7b9acc 100%);
+    color: #f0f4f8;
+    min-height: 100vh;
+    padding-bottom: 50px;
+}
+
+.content-container {
+    max-width: 800px;
+    margin: 90px auto;
+    background-color: white;
+    padding: 40px;
+    min-height: calc(100vh - 220px);
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    border-radius: 10px;
+    color: #333;
+}
+
+.content-container p, .content-container ul {
+    margin-bottom: 20px;
+}
+
+/* Замінили зелений колір на синій */
+h2, h3 {
+    color: #2a5298; /* Синій колір */
+}
+
+.recruitment-section h2, .recruitment-section h3 {
+    color: #2a5298; /* Синій колір */
+}
+
+/* Замінили зелений на синій для каруселі */
+.carousel-container {
+    position: relative;
+    margin: 1em 0 2em;
+    overflow: hidden;
+    border-radius: 12px;
+    background: #f3f7ff;
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.carousel-link {
+    font-size: 1.2em;
+    text-decoration: none;
+    background: #2a5298; /* Синій колір */
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 30px;
+    display: inline-block;
+    transition: background 0.3s;
+    font-family: "IBM Plex Mono", monospace;
+    text-align: center;
+    word-wrap: break-word;
+    max-width: 90%;
+}
+
+.carousel-link:hover {
+    background: #1e3c72; /* Темніший синій колір */
+}
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #2a5298; /* Синій колір */
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    font-size: 1.5em;
+    cursor: pointer;
+    border-radius: 50%;
+    z-index: 10;
+}
+
+.carousel-btn.prev {
+    left: 10px;
+}
+
+.carousel-btn.next {
+    right: 10px;
+}
+
+.carousel-btn:hover {
+    background: #1e3c72; /* Темніший синій */
+}
+
+/* Символи для покрокових інструкцій та каруселі */
+.recruitment-section h3 span, .carousel-link {
+    color: #2a5298; /* Синій колір */
+}
+
+.recruitment-section li {
+    margin-bottom: 10px;
+}
+
+/* Для мобільних пристроїв */
+@media screen and (max-width: 768px) {
+    .content-container {
+        margin: 20px auto;
+        padding: 15px;
+        width: 95%;
+    }
+
+    .title {
+        font-size: 30px;
+        margin-left: 10px;
+        margin-bottom: 20px;
+    }
+
+    .carousel-link {
+        font-size: 0.9em;
+        padding: 8px 16px;
+        max-width: 85%;
+        white-space: normal;
+    }
+
+    .carousel-btn {
+        padding: 5px 10px;
+        font-size: 1.2em;
+    }
+
+    .recruitment-section h2 {
+        font-size: 18px;
+        margin-top: 1em;
+    }
+
+    .recruitment-section h3 {
+        font-size: 16px;
+    }
+
+    .recruitment-section p, .recruitment-section li {
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+
+    .carousel-container {
+        padding: 10px;
+        margin: 0.5em 0 1em;
+    }
+
+    .carousel-slide {
+        padding: 10px 0;
+    }
+}
+    
+        .carousel-dot {
+            height: 10px;
+            width: 10px;
+            background-color: #aaa;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+    
+        .carousel-dot.active {
+            background-color: #2c6fdb; /* Синій колір для активної точки */
+        }
+        .map-title {
+    background-color: #2c6fdb;
+    width: 100%;
+    display: inline-block;
+    box-sizing: border-box;
+}
+
+    
+        #map {
+            width: 100%;
+            height: 500px;
+            border: 1px solid #ddd;
+        }
+    
+        .map-description {
+            margin-top: 20px;
+            font-size: 16px;
+            line-height: 1.6;
+            text-align: justify;
+        }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="content-container">
+    <h1 class="title">
+        Дослідження<br>
+        якості сну та<br>
+        методи як його покращити
+    </h1>
+
+
+    <hr class="section-line">
+
+    <div class="authors-section">
+        <h2 class="authors-title">Автори:</h2>
+        <div class="authors-container row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4 justify-content-center">
+            <div class="author col text-center">
+                <img src="{% static 'main_site/images/ost.jpg' %}" class="author-photo" alt="Сиротюк Віктор">
+                <p class="author-name">Яцків Остап</p>
+            </div>
+            <div class="author col text-center">
+                <img src="{% static 'main_site/images/duma.jpg' %}" class="author-photo" alt="Британ Михайло">
+                <p class="author-name">Дума Остап</p>
+            </div>
+            <div class="author col text-center">
+                <img src="{% static 'main_site/images/shramko.jpg' %}" class="author-photo" alt="Онопрієнко Дарина">
+                <p class="author-name">Шрамко Юліана</p>
+            </div>
+            <div class="author col text-center">
+                <img src="{% static 'main_site/images/sams.jpg' %}" class="author-photo" alt="Говоров Андрій">
+                <p class="author-name">Самсонов Максим</p>
+            </div>
+            <div class="author col text-center">
+                <img src="{% static 'main_site/images/olya.jpg' %}" class="author-photo" alt="Ім’я Прізвище">
+                <p class="author-name">Оля Калиняк</p>
+            </div>
+            <div class="author col text-center">
+                <img src="{% static 'main_site/images/dara.jpg' %}" class="author-photo" alt="Ім’я Прізвище">
+                <p class="author-name">Дарина Гладій</p>
+            </div>
+        </div>
+    </div>
+    
+    
+    
+
+    <div class="content">
+        <p>Наше дослідження спрямоване на аналіз і вдосконалення факторів, що впливають на якість сну. В умовах сучасного темпу життя повноцінний відпочинок і здоровий сон є критично важливими чинниками для збереження фізичного та психічного здоров’я.</p>
+    
+        <p>Дослідження включає аналіз існуючих методик оцінювання якості сну, їх ефективність, а також надає рекомендації щодо покращення умов сну, режиму відпочинку та гігієни сну. Особлива увага приділяється психологічним аспектам, впливу стресу, харчування та цифрових технологій на сон. Також розглядаються практичні поради щодо формування здорових звичок і створення сприятливого середовища для відновлення організму під час сну.</p>
+    </div>
+    
+
+    <!-- Map Section -->
+    <div class="map-section">
+        <h2 class="map-title">МАПА ОБЛАСТЕЙ ЗА РЕЙТИНГОМ БЕЗСОННЯ</h2>
+        <div id="map"></div>
+
+    </div>
+
+    <div class="content">
+        <p>На цьому сайті ви знайдете корисну інформацію та практичні поради щодо покращення якості сну, рекомендації щодо здорової гігієни сну, а також інструменти для моніторингу вашого сну. Крім того, ми надаємо доступ до симуляцій, що допоможуть вам краще зрозуміти, як різні фактори, такі як стрес, харчування та цифрові технології, впливають на ваш сон. Ви також можете залишити свої відгуки та пропозиції, щоб допомогти нам удосконалити матеріали та ресурси для кращого сну.</p>
+    </div>
+    
+
+    
+    <div class="recruitment-section">
+        <h2>Як покращити якість свого сну?</h2>
+    
+        <p>
+        У сучасному світі, де рівень стресу та темп життя постійно зростають, важливість здорового сну важко переоцінити. Хороший сон є основою фізичного та психічного здоров’я, адже він впливає на концентрацію, настрій та загальну працездатність.
+        </p>
+    
+        <p>
+        Для покращення якості сну важливо дотримуватися кількох основних принципів:
+        </p>
+    
+        <ul>
+            <li>Регулярність — лягати спати і вставати в один і той самий час щодня;</li>
+            <li>Створення сприятливих умов для сну: комфортне ліжко, оптимальна температура та відсутність шуму;</li>
+            <li>Збалансоване харчування, без важкої їжі та кофеїну перед сном;</li>
+            <li>Оновлення звичок щодо використання технологій — відключення гаджетів за годину до сну.</li>
+        </ul>
+    
+        <h3><span>💤</span> Як правильно організувати свій режим сну?</h3>
+        <p>Режим сну — це важлива складова гігієни сну. Він включає в себе не лише час, проведений у ліжку, але й підготовку до сну:</p>
+        <ul>
+            <li>Забезпечення темряви в кімнаті, щоб не порушувати вироблення мелатоніну;</li>
+            <li>Створення розслаблюючої атмосфери перед сном: медитація, читання, тепла ванна;</li>
+            <li>Регулярні фізичні вправи протягом дня, але не безпосередньо перед сном.</li>
+        </ul>
+    
+        <h3><span>📱</span> Технології для покращення сну</h3>
+        <p>Існують спеціалізовані додатки та пристрої, які допомагають відстежувати ваш сон і надають рекомендації для його поліпшення. Ви можете використовувати трекери сну або мобільні застосунки для моніторингу циклів сну і виявлення факторів, які впливають на його якість.</p>
+    </div>
+    
+    
+        <h3><span>🔍</span> Актуальні ресурси з вакансіями</h3>
+        
+    
+        <!-- КАРУСЕЛЬ -->
+        <div class="carousel-container">
+            <div class="carousel-track">
+                <div class="carousel-slide">
+                    <a class="carousel-link" href="https://sleepwell.app" target="_blank">🌙 SleepWell.app – трекер та поради для покращення сну</a>
+                </div>
+                <div class="carousel-slide">
+                    <a class="carousel-link" href="https://somniclinic.com" target="_blank">🛏 SomniClinic – пошук клінік та фахівців зі сну</a>
+                </div>
+                <div class="carousel-slide">
+                    <a class="carousel-link" href="https://www.sleepfoundation.org" target="_blank">💤 Sleep Foundation – наукові дослідження та поради для покращення сну</a>
+                </div>
+            </div>
+            <div class="carousel-indicators" style="text-align: center; margin-top: 15px;">
+                <span class="carousel-dot active" data-index="0" style="height: 10px; width: 10px; background-color: #2c6fdb; border-radius: 50%; display: inline-block; margin: 0 5px; cursor: pointer;"></span>
+                <span class="carousel-dot" data-index="1" style="height: 10px; width: 10px; background-color: #aaa; border-radius: 50%; display: inline-block; margin: 0 5px; cursor: pointer;"></span>
+                <span class="carousel-dot" data-index="2" style="height: 10px; width: 10px; background-color: #aaa; border-radius: 50%; display: inline-block; margin: 0 5px; cursor: pointer;"></span>
+            </div>
+            <button class="carousel-btn prev" style="background-color: #2c6fdb; color: white;">‹</button>
+            <button class="carousel-btn next" style="background-color: #2c6fdb; color: white;">›</button>
+        </div>
+        <!-- Кінець каруселі -->        
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const prevBtn = document.querySelector('.carousel-btn.prev');
+                const nextBtn = document.querySelector('.carousel-btn.next');
+                const track = document.querySelector('.carousel-track');
+                const slides = document.querySelectorAll('.carousel-slide');
+                const dots = document.querySelectorAll('.carousel-dot');
+        
+                let index = 0;
+        
+                // Функція для оновлення каруселі
+                function updateCarousel() {
+                    track.style.transform = `translateX(-${index * 100}%)`;
+                    dots.forEach((dot, i) => {
+                        dot.style.backgroundColor = i === index ? '#2c6fdb' : '#aaa';
+                    });
+                }
+        
+                // Функція для обробки кнопки "prev"
+                prevBtn.addEventListener('click', function() {
+                    index = (index - 1 + slides.length) % slides.length;
+                    updateCarousel();
+                });
+        
+                // Функція для обробки кнопки "next"
+                nextBtn.addEventListener('click', function() {
+                    index = (index + 1) % slides.length;
+                    updateCarousel();
+                });
+        
+                // Обробка кліку по точках
+                dots.forEach((dot, i) => {
+                    dot.addEventListener('click', function() {
+                        index = i;
+                        updateCarousel();
+                    });
+                });
+        
+                // Ініціалізація каруселі
+                updateCarousel();
+            });
+            
+        </script>
+        <style>
+            .carousel-container {
+                position: relative;
+                margin: 1em 0 2em;
+                overflow: hidden;
+                border-radius: 12px;
+                background: #f3f7ff;
+                padding: 20px;
+                width: 100%;
+                box-sizing: border-box;
+                min-height: 200px;  /* Додано, щоб забезпечити висоту для тексту */
+            }
+        
+            .carousel-track {
+                display: flex;
+                transition: transform 0.3s ease;
+                height: 100%; /* Забезпечує правильну висоту для всіх слайдів */
+            }
+        
+            .carousel-slide {
+                min-width: 100%;
+                text-align: center;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 20px;
+                box-sizing: border-box;
+                height: 100%; /* Встановлюємо висоту кожного слайду */
+            }
+        
+            .carousel-link {
+                font-size: 1.2em;
+                text-decoration: none;
+                background: #2a5298; /* Синій колір */
+                color: #fff;
+                padding: 12px 24px;
+                border-radius: 30px;
+                display: inline-block;
+                transition: background 0.3s;
+                font-family: "IBM Plex Mono", monospace;
+                text-align: center;
+                word-wrap: break-word;
+                max-width: 90%;
+                z-index: 10; /* Забезпечує, що текст завжди знаходиться поверх */
+            }
+        
+            .carousel-link:hover {
+                background: #1e3c72; /* Темніший синій */
+            }
+        
+            .carousel-btn {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                background: #2c6fdb; /* Синій колір */
+                color: white;
+                border: none;
+                padding: 10px 16px;
+                font-size: 1.5em;
+                cursor: pointer;
+                border-radius: 50%;
+                z-index: 20;
+            }
+        
+            .carousel-btn.prev {
+                left: 10px;
+            }
+        
+            .carousel-btn.next {
+                right: 10px;
+            }
+        
+            .carousel-btn:hover {
+                background: #1e3c72; /* Темніший синій */
+            }
+        
+            .carousel-indicators {
+                text-align: center;
+                margin-top: 15px;
+            }
+        
+            .carousel-dot {
+                height: 10px;
+                width: 10px;
+                background-color: #aaa;
+                border-radius: 50%;
+                display: inline-block;
+                margin: 0 5px;
+                cursor: pointer;
+            }
+        
+            .carousel-dot.active {
+                background-color: #2c6fdb;
+            }
+        </style>
+        <style>
+            html, body {
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                background-color: #ffffff; /* або інший бажаний колір */
+            }
+        
+            body {
+                display: flex;
+                flex-direction: column;
+            }
+        
+            .container {
+                flex: 1;
+            }
+        
+            footer {
+                margin-top: auto;
+            }
+        </style>
+        
+        
+
+    
+        <p>
+            Як покращити якість свого сну? У сучасному світі, де рівень стресу зростає, а темп життя пришвидшується, все більше людей стикаються з проблемами зі сном. Саме тому важливо розуміти, як покращити якість сну — через зміну способу життя, покращення гігієни сну або звернення до фахівців. Основна різниця між цими підходами полягає у рівні втручання: від самостійного впровадження звичок до професійної медичної допомоги.
+        </p>
+        
+        <p>
+            Якість сну впливає на імунітет, концентрацію, психічне здоров’я та загальне самопочуття. Нестача сну або порушення його структури можуть мати серйозні наслідки для здоров’я.
+        </p>
+        
+        <h3><span>🛏️</span> Як розпочати шлях до якісного сну?</h3>
+        <p>
+            Почати покращення сну можна кількома способами:
+        </p>
+        <ul>
+            <li>Аналіз власного режиму дня та фіксація проблем зі сном;</li>
+            <li>Ознайомлення з базовими принципами гігієни сну;</li>
+            <li>Консультація зі спеціалістом (соматологом, невропатологом, психологом);</li>
+            <li>Використання спеціалізованих платформ або мобільних застосунків для моніторингу сну.</li>
+        </ul>
+        
+        <h3><span>🏥</span> Що таке Центр сну?</h3>
+        <p>
+            Центри сну — це спеціалізовані клініки або дослідницькі установи, що займаються діагностикою та лікуванням порушень сну. Вони надають детальну інформацію про причини проблем зі сном, проводять дослідження (наприклад, полісомнографію), а також допомагають підібрати індивідуальні рішення. У багатьох таких центрах можна отримати консультації щодо безсоння, апное сну, хронічної втоми тощо.
+        </p>
+        
+        </div>
+    </div>
+    {% endblock %}
+    
+
+    {% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Ініціалізація карти
+        const map = L.map('map').setView([49.0, 31.0], 6);
+
+        // Додаємо шар карти OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Данні для областей України
+        const oblastMarkers = [
+            { name: "Луганська", number: 1, lat: 48.573269, lng: 39.355942 },
+            { name: "Донецька", number: 2, lat: 48.015883, lng: 37.80285 },
+            { name: "Харківська", number: 3, lat: 49.9935, lng: 36.2304 },
+            { name: "Запорізька", number: 4, lat: 47.8388, lng: 35.1396 },
+            { name: "Київська", number: 5, lat: 50.4501, lng: 30.5234 },
+            { name: "Одеська", number: 6, lat: 46.4825, lng: 30.7233 },
+            { name: "Херсонська", number: 7, lat: 46.6354, lng: 32.6169 },
+            { name: "Дніпропетровська", number: 8, lat: 48.4647, lng: 35.0462 },
+            { name: "Миколаївська", number: 9, lat: 46.975, lng: 31.9946 },
+            { name: "Сумська", number: 10, lat: 50.9077, lng: 34.7981 },
+            { name: "Полтавська", number: 11, lat: 49.5883, lng: 34.5514 },
+            { name: "Чернігівська", number: 12, lat: 51.4982, lng: 31.2893 },
+            { name: "Черкаська", number: 13, lat: 49.4444, lng: 32.0598 },
+            { name: "Кіровоградська", number: 14, lat: 48.5079, lng: 32.2623 },
+            { name: "Вінницька", number: 15, lat: 49.2328, lng: 28.481 },
+            { name: "Львівська", number: 16, lat: 49.8397, lng: 24.0297 },
+            { name: "Житомирська", number: 17, lat: 50.2547, lng: 28.6587 },
+            { name: "Хмельницька", number: 18, lat: 49.4216, lng: 26.9965 },
+            { name: "Івано-Франківська", number: 19, lat: 48.9226, lng: 24.7103 },
+            { name: "Тернопільська", number: 20, lat: 49.5535, lng: 25.5948 },
+            { name: "Волинська", number: 21, lat: 50.7472, lng: 25.3254 },
+            { name: "Чернівецька", number: 22, lat: 48.2915, lng: 25.9358 },
+            { name: "Рівненська", number: 23, lat: 50.6199, lng: 26.2516 },
+            { name: "Ужгородська (Закарпатська)", number: 24, lat: 48.6208, lng: 22.2879 },
+        ];
+
+        // Додаємо маркери на карту
+        oblastMarkers.forEach(marker => {
+            const customMarkerLabel = L.divIcon({
+                className: 'custom-marker-label',
+                html: `<div>${marker.number}</div>`,
+                iconSize: [30, 30],
+                iconAnchor: [15, 15]
+            });
+
+            L.marker([marker.lat, marker.lng], { icon: customMarkerLabel })
+                .addTo(map)
+                .bindPopup(`<b>${marker.number}. ${marker.name}</b>`);
+        });
+
+        // Функція для коректного підбору меж карти, щоб всі маркери відображались
+        function fitAllMarkers() {
+            const bounds = [];
+            oblastMarkers.forEach(marker => {
+                bounds.push([marker.lat, marker.lng]);
+            });
+            map.fitBounds(bounds);
+        }
+
+        // Підгонка карти по маркерам
+        fitAllMarkers();
+    });
+</script>
+
+<style>
+    .custom-marker-label {
+        background-color: #2c6fdb;  /* Синій відтінок */
+        color: white;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        border: 2px solid white;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        font-size: 14px;
+    }
+
+    .custom-marker-label:hover {
+        background-color: #255fa4;  /* Темніший синій при наведені */
+    }
+</style>
+{% endblock %}

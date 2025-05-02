@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Медитації для сну{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        font-family: "IBM Plex Mono", monospace;
+        background: linear-gradient(180deg, #1e3c72 0%, #2a5298 50%, #7b9acc 100%);
+
+        margin: 0;
+        padding: 0;
+    }
+
+    .content-container {
+        max-width: 800px;
+        margin: 90px auto;
+        background-color: white;
+        padding: 40px;
+        min-height: calc(100vh - 200px);
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        border-radius: 8px;
+    }
+
+    .title {
+        font-size: 36px;
+        color: #000000;
+        margin-bottom: 30px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .section {
+        margin-bottom: 40px;
+    }
+
+    .section-title {
+        font-size: 24px;
+        color: #2a5298;
+        margin-bottom: 15px;
+        padding-bottom: 5px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .benefits-list,
+    .recommendations-list {
+        list-style-type: disc;
+        padding-left: 20px;
+        line-height: 1.6;
+    }
+
+    .benefits-list li,
+    .recommendations-list li {
+        margin-bottom: 10px;
+    }
+
+    .note {
+        background-color: #fff4e5;
+        border-left: 4px solid #ffd89e;
+        padding: 15px;
+        margin-top: 30px;
+        font-style: italic;
+        color: #664d03;
+    }
+
+    .video-container {
+        position: relative;
+        padding-bottom: 56.25%;
+        height: 0;
+        overflow: hidden;
+        margin-top: 20px;
+        border-radius: 8px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .video-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+    }
+
+    .stats-box {
+        background-color: #e6f7ff;
+        border-left: 4px solid #91d5ff;
+        padding: 15px;
+        margin-top: 20px;
+        color: #003a8c;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<body>
+    <div class="content-container">
+        <h1 class="title">Медитації для покращення сну</h1>
+
+        <div class="section">
+            <h2 class="section-title">Що таке медитація?</h2>
+            <p>Медитація — це техніка зосередження уваги та розслаблення розуму, яка допомагає знизити рівень стресу, тривоги та покращити якість сну.</p>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Як медитація впливає на сон?</h2>
+            <ul class="benefits-list">
+                <li>Зменшує рівень кортизолу (гормону стресу)</li>
+                <li>Полегшує засинання</li>
+                <li>Знижує кількість нічних пробуджень</li>
+                <li>Підвищує загальну якість сну</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Рекомендовані практики</h2>
+            <ul class="recommendations-list">
+                <li>Слухайте медитації перед сном (наприклад, 10–15 хвилин перед тим як лягати)</li>
+                <li>Регулярність — щодня в один і той самий час</li>
+                <li>Використовуйте додатки: Calm, Headspace, Insight Timer, Meditopia</li>
+                <li>Створіть комфортні умови: темрява, тиша, зручне положення</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Відео медитацій</h2>
+
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/3km_KpyM4ZU" allowfullscreen></iframe>
+            </div>
+
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/kgTftSldr-U" allowfullscreen></iframe>
+            </div>
+        </div>
+
+        <div class="stats-box">
+            <p><strong>Цікаво:</strong> За дослідженнями, регулярна практика медитації зменшує ймовірність безсоння на 38% та покращує загальну якість сну у 60% учасників.</p>
+        </div>
+
+        <div class="note">
+            <p><strong>Порада:</strong> Найкращий ефект від медитації досягається, коли вона стає частиною щоденної рутини. Почніть з коротких сесій і поступово збільшуйте тривалість.</p>
+        </div>
+    </div>
+</body>
+{% endblock %}

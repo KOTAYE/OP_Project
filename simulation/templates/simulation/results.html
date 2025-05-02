@@ -1,0 +1,271 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Результати - Аналіз якості сну{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        font-family: "IBM Plex Mono", monospace;
+        background: linear-gradient(180deg, #1e3c72 0%, #2a5298 50%, #7b9acc 100%);
+    }
+
+    body > .container {
+        background-color: transparent;
+        max-width: 100%;
+        padding: 0;
+        margin-top: 0;
+    }
+
+    .content-container {
+        max-width: 800px;
+        margin: 90px auto;
+        background-color: white;
+        padding: 40px;
+        min-height: calc(100vh - 200px);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .title {
+        font-size: 36px;
+        color: #ffffff;
+        margin-bottom: 30px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .results-container {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        align-items: center;
+    }
+
+    .results-card {
+        background-color: #f0f4f8;
+        padding: 40px;
+        border-radius: 8px;
+        width: 100%;
+        max-width: 600px;
+        text-align: center;
+    }
+
+    .score-container {
+        margin: 30px 0;
+    }
+
+    .score-title {
+        font-size: 20px;
+        color: #333;
+        margin-bottom: 15px;
+    }
+
+    .score-value {
+        font-size: 48px;
+        font-weight: bold;
+        color: #1e3c72;
+    }
+
+    .score-max {
+        font-size: 20px;
+        color: #666;
+    }
+
+    .result-text {
+        font-size: 24px;
+        color: #1e3c72;
+        margin: 30px 0;
+        font-weight: bold;
+    }
+
+    .restart-button {
+        background-color: #1e3c72;
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 18px;
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 20px;
+    }
+
+    .restart-button:hover {
+        background-color: #16315f;
+    }
+
+    .share-container {
+        margin-top: 30px;
+    }
+
+    .share-title {
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+
+    .share-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .share-button {
+        background-color: #2a5298;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    /* Mobile styles */
+    @media (max-width: 767px) {
+        .content-container {
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .title {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .results-card {
+            padding: 20px;
+        }
+
+        .score-title {
+            font-size: 18px;
+        }
+
+        .score-value {
+            font-size: 36px;
+        }
+
+        .score-max {
+            font-size: 16px;
+        }
+
+        .result-text {
+            font-size: 20px;
+        }
+
+        .restart-button {
+            font-size: 16px;
+            padding: 12px 25px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .share-title {
+            font-size: 16px;
+        }
+
+        .share-button {
+            font-size: 14px;
+            padding: 8px 12px;
+        }
+    }
+
+    /* Tablet styles */
+    @media (max-width: 1024px) and (min-width: 768px) {
+        .content-container {
+            padding: 30px;
+            margin-top: 40px;
+        }
+
+        .title {
+            font-size: 32px;
+            margin-bottom: 25px;
+        }
+
+        .results-card {
+            padding: 30px;
+        }
+
+        .score-title {
+            font-size: 18px;
+        }
+
+        .score-value {
+            font-size: 42px;
+        }
+
+        .score-max {
+            font-size: 18px;
+        }
+
+        .result-text {
+            font-size: 22px;
+        }
+
+        .restart-button {
+            font-size: 16px;
+            padding: 12px 25px;
+        }
+
+        .share-title {
+            font-size: 17px;
+        }
+
+        .share-button {
+            font-size: 15px;
+            padding: 10px 15px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="content-container">
+    <h1 class="title">Результати симуляції</h1>
+    
+    <div class="results-container">
+        <div class="results-card">
+            <h2>Ви завершили симуляцію</h2>
+            
+
+            
+            <div class="result-text">
+                {{ result_text }}
+            </div>
+            
+            <a href="{% url 'simulation:start' %}" class="restart-button">Почати знову</a>
+            
+            <div class="share-container">
+                <div class="share-title">Поділитися результатом:</div>
+                <div class="share-buttons">
+                    <button class="share-button" id="facebookShare">Facebook</button>
+                    <button class="share-button" id="twitterShare">Twitter</button>
+                    <button class="share-button" id="telegramShare">Telegram</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Share functionality
+        const shareText = "{{ result_text }}";  // Ось тут замінимо на result_text, щоб ділитися саме повідомленням
+        const shareUrl = window.location.href;;
+        
+        document.getElementById('facebookShare').addEventListener('click', function() {
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareText)}`, '_blank');
+        });
+        
+        document.getElementById('twitterShare').addEventListener('click', function() {
+            window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`, '_blank');
+        });
+        
+        document.getElementById('telegramShare').addEventListener('click', function() {
+            window.open(`https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`, '_blank');
+        });
+    });
+</script>
+{% endblock %}

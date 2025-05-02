@@ -1,0 +1,9 @@
+name: project-recruitment
+type: web
+git:
+  repository: Trix1331/Project-OP
+  branch: review
+  buildpack: dockerfile
+ports:
+  - port: 8000
+    http: true

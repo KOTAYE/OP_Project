@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Інструкції - Покращення якості сну{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        font-family: "IBM Plex Mono", monospace;
+        background: linear-gradient(180deg, #1e3c72 0%, #2a5298 50%, #7b9acc 100%);
+    }
+    body > .container {
+        background-color: transparent;
+        max-width: 100%;
+        padding: 0;
+        margin-top: 0;
+    }
+    .content-container {
+        max-width: 800px;
+        margin: 90px auto;
+        background-color: white;
+        padding: 40px;
+        min-height: calc(100vh - 200px);
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .title {
+        font-size: 36px;
+        color: #000000;
+        margin-bottom: 30px;
+        font-weight: bold;
+        text-align: center;
+    }
+    
+    .section {
+        margin-bottom: 40px;
+    }
+    
+    .section-title {
+        font-size: 24px;
+        color: #2a5298;
+        margin-bottom: 15px;
+        padding-bottom: 5px;
+        border-bottom: 1px solid #ddd;
+    }
+    
+    .instructions-list {
+        counter-reset: steps;
+        padding-left: 0;
+        list-style-type: none;
+    }
+    
+    .step {
+        position: relative;
+        padding: 15px 15px 15px 60px;
+        margin-bottom: 15px;
+        background-color: #f8f8f8;
+        border-radius: 5px;
+    }
+    
+    .step:before {
+        counter-increment: steps;
+        content: counter(steps);
+        position: absolute;
+        left: 15px;
+        top: 15px;
+        width: 30px;
+        height: 30px;
+        background-color: #2a5298;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+    }
+    
+    .step-title {
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #2a5298;
+    }
+    
+    .step-description {
+        color: #333;
+        line-height: 1.5;
+    }
+    
+    .documents-section {
+        background-color: #eaf5ea;
+        padding: 20px;
+        border-radius: 5px;
+        margin-top: 30px;
+    }
+    
+    .documents-title {
+        font-size: 20px;
+        color: #2a5298;
+        margin-bottom: 15px;
+    }
+    
+    .documents-list {
+        list-style-type: disc;
+        padding-left: 20px;
+    }
+    
+    .documents-list li {
+        margin-bottom: 10px;
+        color: #333;
+    }
+    
+    .note {
+        background-color: #fff4e5;
+        border-left: 4px solid #ffd89e;
+        padding: 15px;
+        margin-top: 30px;
+        font-style: italic;
+        color: #664d03;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="content-container">
+    <h1 class="title">Інструкції щодо покращення якості сну</h1>
+
+    <div class="section">
+        <h2 class="section-title">Покроковий процес покращення сну</h2>
+        <ol class="instructions-list">
+            <li class="step">
+                <h3 class="step-title">Оцінка поточного стану сну</h3>
+                <p class="step-description">Перший крок — усвідомити наявні проблеми зі сном. Ведіть щоденник сну протягом 7 днів: фіксуйте час засинання, пробудження, кількість пробуджень уночі, загальну тривалість сну та самопочуття вранці.</p>
+            </li>
+            <li class="step">
+                <h3 class="step-title">Консультація з фахівцем або проходження опитування</h3>
+                <p class="step-description">Зверніться до сомнолога або пройдіть спеціалізований тест (наприклад, шкала якості сну Піттсбурга), щоб отримати об’єктивну оцінку стану сну.</p>
+            </li>
+            <li class="step">
+                <h3 class="step-title">Аналіз впливу способу життя</h3>
+                <p class="step-description">Оцініть фактори, що можуть впливати на сон: вживання кофеїну, фізичну активність, стрес, використання екранів перед сном тощо. Визначте можливі причини порушень сну.</p>
+            </li>
+            <li class="step">
+                <h3 class="step-title">Медичне обстеження (за потреби)</h3>
+                <p class="step-description">У разі хронічного безсоння або підозри на апное — пройдіть медичне обстеження. Це допоможе виключити або підтвердити фізіологічні проблеми, що впливають на якість сну.</p>
+            </li>
+            <li class="step">
+                <h3 class="step-title">Підбір методів покращення сну</h3>
+                <p class="step-description">На основі зібраної інформації оберіть індивідуальні методи: когнітивно-поведінкова терапія, релаксаційні техніки, режим сну, гігієна сну, зменшення стимулів перед сном тощо.</p>
+            </li>
+            <li class="step">
+                <h3 class="step-title">Запровадження змін</h3>
+                <p class="step-description">Сформуйте чіткий план: поступово впроваджуйте нові звички та відслідковуйте їх вплив на сон. Рекомендується мінімум 2–3 тижні для оцінки результатів.</p>
+            </li>
+            <li class="step">
+                <h3 class="step-title">Моніторинг результатів і корекція</h3>
+                <p class="step-description">Регулярно відстежуйте зміни в якості сну. За потреби — корегуйте стратегії або звертайтеся до фахівців для поглибленої допомоги.</p>
+            </li>
+        </ol>
+    </div>
+
+    <div class="documents-section">
+        <h3 class="documents-title">Що знадобиться для практики медитації:</h3>
+        <ul class="documents-list">
+            <li>Спокійне та затишне місце</li>
+            <li>Навушники для глибшого занурення</li>
+            <li>Смартфон або інший пристрій з доступом до інтернету</li>
+            <li>Додаток для медитацій (Calm, Headspace, Insight Timer, Meditopia)</li>
+            <li>Ковдра або плед для комфорту</li>
+            <li>Бажання знизити стрес і покращити сон</li>
+        </ul>
+        <div class="text-center mt-4">
+            <a href="{% url 'instructions:women' %}" class="btn btn-success btn-lg">
+                Медитація
+            </a>
+        </div>
+    </div>
+
+    <div class="note">
+        <p><strong>Примітка:</strong> Інформація надана для загального ознайомлення та може змінюватися. Для отримання додаткової допомоги звертайтесь до сомнолога або іншого медичного фахівця.</p>
+    </div>
+</div>
+{% endblock %}

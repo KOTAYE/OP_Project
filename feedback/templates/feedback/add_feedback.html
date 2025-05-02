@@ -1,0 +1,284 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Відгуки - Дослідження рекрутингу в українську армію{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        font-family: "IBM Plex Mono", monospace;
+        background: linear-gradient(180deg, #1e3c72 0%, #2a5298 50%, #7b9acc 100%);
+    }
+
+    body > .container {
+        background-color: transparent;
+        max-width: 100%;
+        padding: 0;
+        margin-top: 0;
+    }
+
+    .content-container {
+        max-width: 800px;
+        margin: 90px auto;
+        background-color: white;
+        padding: 40px;
+        min-height: calc(100vh - 200px);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .feedback-layout {
+        display: flex;
+        flex-direction: row;
+        min-height: calc(100vh - 200px);
+    }
+
+    .feedback-left {
+        flex: 1;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .feedback-right {
+        flex: 1;
+        padding: 20px;
+        background-color: #e0e0e0;
+        border-radius: 10px;
+        margin: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .feedback-title {
+        text-align: left;
+        font-size: 60px;
+        margin-bottom: 40px;
+        color: #000000;
+        font-weight: bold;
+        line-height: 1.2;
+    }
+
+    .feedback-text {
+        font-size: 24px;
+        line-height: 1.5;
+        margin-bottom: 20px;
+    }
+
+    .feedback-form {
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-label {
+        display: block;
+        font-size: 18px;
+        margin-bottom: 8px;
+        font-weight: bold;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-family: "IBM Plex Mono", monospace;
+    }
+
+    .form-control-textarea {
+        height: 150px;
+        resize: vertical;
+    }
+
+    .star-rating {
+        display: flex;
+        direction: rtl;
+        justify-content: center;
+        padding: 10px 20px;
+    }
+
+    .star-rating input {
+        display: none;
+    }
+
+    .star-rating label {
+        font-size: 30px;
+        color: #aaa;
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+
+    .star-rating label:hover,
+    .star-rating label:hover ~ label {
+        color: #ffe600;
+    }
+
+    .star-rating label.active {
+        color: #ffe600;
+    }
+
+    .register-text {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .register-btn {
+        background-color: #fff;
+        border: 2px solid #000;
+        color: #000;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 30px;
+        font-family: "IBM Plex Mono", monospace;
+        margin-top: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .register-btn:hover {
+        background-color: #000;
+        color: #fff;
+    }
+
+    /* Мобільна адаптація */
+    @media (max-width: 768px) {
+        .content-container {
+            margin: 20px 10px;
+            padding: 20px;
+        }
+
+        .feedback-layout {
+            flex-direction: column;
+        }
+
+        .feedback-left,
+        .feedback-right {
+            width: 100%;
+            margin: 0;
+            padding: 10px;
+        }
+
+        .feedback-title {
+            font-size: 32px;
+            text-align: center;
+        }
+
+        .feedback-text {
+            font-size: 18px;
+        }
+
+        .form-label {
+            font-size: 16px;
+        }
+
+        .form-control {
+            font-size: 16px;
+        }
+
+        .register-btn {
+            width: 100%;
+            font-size: 18px;
+        }
+
+        .star-rating label {
+            font-size: 24px;
+        }
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="content-container">
+    <div class="feedback-layout">
+        <div class="feedback-left">
+            <h1 class="feedback-title">
+                Залишіть свій відгук про наше дослідження!
+            </h1>
+        </div>
+        <div class="feedback-right">
+            <form class="feedback-form" method="post" action="{% url 'feedback:add' %}">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label class="form-label" for="name">Ім'я</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Оцінка</label>
+                    <div class="star-rating">
+                        <input type="radio" id="star5" name="rating" value="5">
+                        <label for="star5">★</label>
+                        
+                        <input type="radio" id="star4" name="rating" value="4">
+                        <label for="star4">★</label>
+                        
+                        <input type="radio" id="star3" name="rating" value="3">
+                        <label for="star3">★</label>
+                        
+                        <input type="radio" id="star2" name="rating" value="2">
+                        <label for="star2">★</label>
+                        
+                        <input type="radio" id="star1" name="rating" value="1">
+                        <label for="star1">★</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="comment">Відгук</label>
+                    <textarea class="form-control form-control-textarea" id="comment" name="comment" required></textarea>
+                </div>
+                
+                <div class="register-text">
+                    <p>Дякуємо!</p>
+                    <button type="submit" class="register-btn">Відправити</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% if messages %}
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+            {% for message in messages %}
+                alert("{{ message }}");  // Спливне повідомлення
+            {% endfor %}
+        });
+    </script>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const ratingInputs = document.querySelectorAll('.star-rating input');
+        const labels = document.querySelectorAll('.star-rating label');
+
+        ratingInputs.forEach(input => {
+            input.addEventListener('change', () => {
+                // Очистити попередні
+                labels.forEach(label => label.classList.remove('active'));
+
+                // Знайти вибране значення
+                const rating = parseInt(input.value);
+
+                // Додати клас .active до відповідних label
+                for (let i = 1; i <= rating; i++) {
+                    const label = document.querySelector(`label[for="star${i}"]`);
+                    if (label) label.classList.add('active');
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

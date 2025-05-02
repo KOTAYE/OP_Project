@@ -1,0 +1,230 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Початок симуляції - Військовий рекрутинг{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        font-family: "IBM Plex Mono", monospace;
+        background: linear-gradient(180deg, #1e3c72 0%, #2a5298 50%, #7b9acc 100%);
+    }
+
+    body > .container {
+        background-color: transparent;
+        max-width: 100%;
+        padding: 0;
+        margin-top: 0;
+    }
+
+    .content-container {
+        max-width: 900px;
+        width: 95%;
+        margin: 50px auto;
+        background-color: white;
+        padding: 20px;
+        min-height: calc(100vh - 180px);
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+    }
+
+    .title {
+        font-size: 28px;
+        color: #000000;
+        margin-bottom: 20px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .nav-tabs {
+        flex-wrap: wrap;
+    }
+
+    .nav-tabs .nav-link {
+        font-family: "IBM Plex Mono", monospace;
+        color: #2a5298;
+        font-weight: bold;
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+
+    .nav-tabs .nav-link.active {
+        background-color: #2a5298;
+        color: white;
+    }
+
+    .simulation-description {
+        background-color: #f8f8f8;
+        padding: 20px;
+        border-radius: 5px;
+        margin-top: 20px;
+    }
+
+    .description-title {
+        font-size: 20px;
+        margin-bottom: 15px;
+        color: #2a5298;
+    }
+
+    .description-text {
+        font-size: 16px;
+        line-height: 1.5;
+    }
+
+    .start-button {
+        background-color: #2a5298;
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 16px;
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .start-button:hover {
+        background-color: #1e3c72;
+        color: white;
+        text-decoration: none;
+    }
+
+    .image-container {
+        width: 100%;
+        height: 200px;
+        background-color: #eee;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 20px;
+    }
+
+    .image-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* Медіа-запити для адаптивності */
+    @media (max-width: 768px) {
+        .content-container {
+            margin: 30px auto;
+            padding: 15px;
+            width: 92%;
+        }
+
+        .title {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .image-container {
+            height: 180px;
+            margin-bottom: 15px;
+        }
+
+        .nav-tabs .nav-link {
+            font-size: 13px;
+            padding: 6px 10px;
+        }
+
+        .simulation-description {
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .description-title {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .description-text {
+            font-size: 14px;
+        }
+
+        .start-button {
+            padding: 10px 20px;
+            font-size: 14px;
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 15px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .content-container {
+            margin: 20px auto;
+            padding: 12px;
+            width: 90%;
+        }
+
+        .title {
+            font-size: 20px;
+        }
+
+        .image-container {
+            height: 150px;
+        }
+
+        .nav-tabs .nav-item {
+            width: 100%;
+            margin-bottom: 5px;
+        }
+
+        .nav-tabs .nav-link {
+            width: 100%;
+            text-align: center;
+            border-radius: 4px;
+            margin-right: 0;
+        }
+
+        .description-title {
+            font-size: 16px;
+        }
+
+        .description-text {
+            font-size: 13px;
+            line-height: 1.4;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="content-container">
+    <h1 class="title">Аналіз якості сну</h1>
+
+    <div class="image-container">
+        <img src="{% static 'simulation/images/sim_vis.gif' %}" alt="Військова підготовка">
+    </div>
+
+    <p class="description-text">
+        Оберіть один із блоків симуляції для проходження. Ви зможете перевірити свої знання щодо придатності до нормального сну, медичних факторів сну або звичок та умов хорошого сну.
+    </p>
+
+    <ul class="nav nav-tabs mt-3" id="blockTabs" role="tablist">
+        {% for block in blocks %}
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {% if forloop.first %}active{% endif %}" id="tab-{{ block.id }}" data-bs-toggle="tab" data-bs-target="#block-{{ block.id }}" type="button" role="tab">
+                {{ block.title }}
+            </button>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <div class="tab-content" id="blockTabsContent">
+        {% for block in blocks %}
+        <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="block-{{ block.id }}" role="tabpanel">
+            <div class="simulation-description">
+                <h2 class="description-title">{{ block.title }}</h2>
+                <p class="description-text">{{ block.description }}</p>
+                <a href="{% url 'simulation:start' %}?block_id={{ block.id }}" class="start-button">Почати цей блок</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
